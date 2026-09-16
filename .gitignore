@@ -1,1 +1,18 @@
 /leetcode_note.md
+
+# Backend
+Backend/venv/
+Backend/__pycache__/
+Backend/**/__pycache__/
+Backend/.env
+Backend/uploads/
+*.pyc
+
+# Frontend
+Fontend/node_modules/
+Fontend/dist/
+Fontend/.env
+
+# OS / editor
+.DS_Store
+.vscode/
