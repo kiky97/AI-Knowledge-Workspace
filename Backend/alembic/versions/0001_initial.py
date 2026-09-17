@@ -33,7 +33,6 @@ def upgrade() -> None:
     document_status = postgresql.ENUM(
         "pending", "processing", "ready", "failed", name="documentstatus"
     )
-    document_status.create(op.get_bind())
 
     op.create_table(
         "documents",
@@ -65,7 +64,6 @@ def upgrade() -> None:
     op.execute("CREATE INDEX chunks_embedding_idx ON chunks USING ivfflat (embedding vector_cosine_ops)")
 
     message_role = postgresql.ENUM("user", "assistant", name="messagerole")
-    message_role.create(op.get_bind())
 
     op.create_table(
         "conversations",

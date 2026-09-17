@@ -6,12 +6,14 @@ from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.api.deps import get_current_user
+from app.core.config import settings
 from app.db.session import AsyncSessionLocal, get_db
 from app.models.conversation import Conversation, Message, MessageRole
 from app.models.user import User
 from app.schemas.chat import ChatRequest
 from app.services.llm import embed_texts, stream_chat_completion
 from app.services.rag import retrieve_relevant_chunks
+from app.services.usage import log_usage
 
 router = APIRouter(prefix="/api/chat", tags=["chat"])
 
@@ -48,7 +50,7 @@ async def chat(
     db.add(user_message)
     await db.commit()
 
-    [query_embedding] = await embed_texts([payload.message])
+    [query_embedding], embedding_tokens = await embed_texts([payload.message])
     chunks = await retrieve_relevant_chunks(db, query_embedding, document_ids=payload.document_ids)
 
     context_block = "\n\n".join(
@@ -57,6 +59,10 @@ async def chat(
         for i, chunk in enumerate(chunks)
     )
     user_prompt = f"Context:\n{context_block}\n\nQuestion: {payload.message}"
+    chat_messages = [
+        {"role": "system", "content": SYSTEM_PROMPT},
+        {"role": "user", "content": user_prompt},
+    ]
 
     citations = [
         {
@@ -73,9 +79,15 @@ async def chat(
         yield f"event: citations\ndata: {json.dumps(citations)}\n\n"
 
         full_response = ""
-        async for delta in stream_chat_completion(SYSTEM_PROMPT, user_prompt):
-            full_response += delta
-            yield f"event: token\ndata: {json.dumps({'text': delta})}\n\n"
+        prompt_tokens_total = embedding_tokens
+        completion_tokens_total = 0
+        async for event in stream_chat_completion(chat_messages):
+            if event["type"] == "token":
+                full_response += event["text"]
+                yield f"event: token\ndata: {json.dumps({'text': event['text']})}\n\n"
+            elif event["type"] == "usage":
+                prompt_tokens_total += event["prompt_tokens"]
+                completion_tokens_total += event["completion_tokens"]
 
         async with AsyncSessionLocal() as save_db:
             assistant_message = Message(
@@ -86,6 +98,15 @@ async def chat(
             )
             save_db.add(assistant_message)
             await save_db.commit()
+
+            await log_usage(
+                save_db,
+                current_user.id,
+                endpoint="chat",
+                model=settings.CHAT_MODEL,
+                prompt_tokens=prompt_tokens_total,
+                completion_tokens=completion_tokens_total,
+            )
 
         yield f"event: done\ndata: {json.dumps({'conversation_id': str(conversation.id)})}\n\n"
 

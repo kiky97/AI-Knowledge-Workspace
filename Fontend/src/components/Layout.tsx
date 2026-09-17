@@ -16,6 +16,15 @@ export function Layout({ children }: { children: ReactNode }) {
           <NavLink to="/chat" className={({ isActive }) => (isActive ? 'active' : '')}>
             Chat
           </NavLink>
+          <NavLink to="/notes" className={({ isActive }) => (isActive ? 'active' : '')}>
+            Notes
+          </NavLink>
+          <NavLink to="/agent" className={({ isActive }) => (isActive ? 'active' : '')}>
+            AI Agent
+          </NavLink>
+          <NavLink to="/settings" className={({ isActive }) => (isActive ? 'active' : '')}>
+            Settings
+          </NavLink>
         </nav>
         <button className="logout-button" onClick={logout}>
           Log out

@@ -35,7 +35,7 @@ async def ingest_document(db: AsyncSession, document: Document) -> None:
             await db.commit()
             return
 
-        embeddings = await embed_texts([c[1] for c in pending_chunks])
+        embeddings, _ = await embed_texts([c[1] for c in pending_chunks])
 
         for (chunk_index, content, page_number), embedding in zip(pending_chunks, embeddings):
             db.add(

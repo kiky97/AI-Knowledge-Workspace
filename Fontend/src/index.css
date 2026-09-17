@@ -314,3 +314,210 @@ textarea:focus {
   resize: none;
   min-height: 48px;
 }
+
+/* Notes */
+.notes-page {
+  display: flex;
+  gap: 24px;
+  height: calc(100svh - 64px);
+}
+.notes-list {
+  width: 260px;
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.graph-link {
+  color: var(--accent);
+  font-size: 13px;
+  text-decoration: none;
+  margin-bottom: 8px;
+}
+.notes-list ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.notes-list li {
+  display: flex;
+  align-items: center;
+  border-radius: 8px;
+}
+.notes-list li.active {
+  background: var(--accent-bg);
+}
+.note-item {
+  flex: 1;
+  text-align: left;
+  background: none;
+  color: var(--text);
+  padding: 8px 10px;
+}
+.notes-list li.active .note-item {
+  color: var(--accent);
+  font-weight: 600;
+}
+.note-editor {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+.editor-toolbar {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+.title-input {
+  flex: 1;
+  font-size: 18px;
+  font-weight: 600;
+}
+.content-editor {
+  flex: 1;
+  resize: none;
+  font-family: var(--mono, ui-monospace, monospace);
+  font-size: 14px;
+  line-height: 1.6;
+}
+.markdown-preview {
+  flex: 1;
+  overflow-y: auto;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 16px 20px;
+  background: var(--bg-panel);
+  text-align: left;
+}
+
+/* Notes graph */
+.graph-svg {
+  width: 100%;
+  height: 70svh;
+  background: var(--bg-panel);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+}
+.graph-edge {
+  stroke: var(--border);
+  stroke-width: 1.5;
+}
+.graph-node {
+  cursor: pointer;
+}
+.graph-node circle {
+  fill: var(--accent-bg);
+  stroke: var(--accent);
+  stroke-width: 1.5;
+}
+.graph-node text {
+  font-size: 11px;
+  fill: var(--text-h);
+}
+
+/* Agent tool calls */
+.tool-calls {
+  margin-bottom: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.tool-call {
+  background: var(--accent-bg);
+  border-radius: 8px;
+  padding: 8px 10px;
+  font-size: 12px;
+}
+.tool-badge {
+  font-weight: 600;
+  color: var(--accent);
+}
+.tool-call code {
+  display: block;
+  margin-top: 4px;
+  opacity: 0.8;
+}
+.tool-result {
+  margin: 6px 0 0;
+  max-height: 140px;
+  overflow-y: auto;
+  background: var(--bg);
+  border-radius: 6px;
+  padding: 6px 8px;
+  font-size: 11px;
+  white-space: pre-wrap;
+}
+
+/* Settings / usage */
+.settings-section {
+  margin-top: 24px;
+  text-align: left;
+}
+.settings-section h2 {
+  font-size: 16px;
+  margin-bottom: 16px;
+}
+.usage-stats {
+  display: flex;
+  gap: 16px;
+  margin-bottom: 24px;
+}
+.stat-tile {
+  background: var(--bg-panel);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 16px 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 140px;
+}
+.stat-value {
+  font-size: 24px;
+  font-weight: 700;
+  color: var(--text-h);
+}
+.stat-label {
+  font-size: 12px;
+  opacity: 0.7;
+}
+.usage-chart {
+  display: flex;
+  align-items: flex-end;
+  gap: 4px;
+  height: 160px;
+  border-bottom: 1px solid var(--border);
+  padding: 0 4px 8px;
+  margin-bottom: 8px;
+}
+.usage-bar-col {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  align-items: center;
+  height: 100%;
+  gap: 4px;
+}
+.usage-bar {
+  width: 100%;
+  max-width: 18px;
+  background: var(--accent);
+  border-radius: 3px 3px 0 0;
+  min-height: 2px;
+}
+.usage-bar-label {
+  font-size: 9px;
+  opacity: 0.6;
+  writing-mode: vertical-rl;
+}
+.usage-by-endpoint {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}

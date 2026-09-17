@@ -19,6 +19,8 @@ class Settings(BaseSettings):
     EMBEDDING_DIM: int = 1536
     CHAT_MODEL: str = "gpt-4o-mini"
 
+    TAVILY_API_KEY: str = ""
+
     CHUNK_SIZE: int = 800
     CHUNK_OVERLAP: int = 120
 
